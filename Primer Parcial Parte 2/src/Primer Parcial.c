@@ -116,14 +116,20 @@ int main(void)
 			case 5:
 				printf("\t  >>LISTA DE SERVICIOS<<\t\t\n");
 				MostrarListaServicios(unServicio,S);
+				break;
+			case 6:
 				printf("\t  >>SERVICIO CON MAS TRABAJOS<<\t\t\n");
 				ServicioConMasTrabajos(unServicio,S,unTrabajo,T);
+				break;
+			case 7:
 				printf("\t  >>SERVICIO CON SU BICICLETA<<\t\t\n");
 				ListadoServiciosPorBicicleta(unServicio,S,unTrabajo,T,unaBicicleta,B);
+				break;
+			case 8:
 				printf("\t  >>CANTIDAD DE BICICLETAS ROJAS QUE HICIERON SERVICIO<<\t\t\n");
 				CantidadBicisRojas(unaBicicleta,B,unTrabajo,T);
 				break;
-			case 6:
+			case 9:
 				printf("\t\t  >>TOTAL<<\t\t\n");
 				TotalPesosServicio(unTrabajo,T,unServicio,S);
 				break;

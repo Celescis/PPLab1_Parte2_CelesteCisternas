@@ -20,10 +20,13 @@ int Menu()
 	printf("3. BAJA\n");
 	printf("4. MOSTRAR lista trabajos\n");
 	printf("5. MOSTRAR lista servicios\n");
-	printf("6. TOTAL en pesos por los servicios prestados\n");
+	printf("6. MOSTRAR servicios con mas trabajos\n");
+	printf("7. MOSTRAR servicio con su bicicleta\n");
+	printf("8. MOSTRAR cantidad bicicletas rojas\n");
+	printf("9. TOTAL en pesos por los servicios prestados\n");
 	printf("0. SALIR\n");
 
-	utn_getInt("\nIngrese una opcion: \n","Error, opcion invalida\n",0,6,3,&opciones);
+	utn_getInt("\nIngrese una opcion: \n","Error, opcion invalida\n",0,9,3,&opciones);
 
 	return opciones;
 }
@@ -47,7 +50,7 @@ int AltaTrabajo(eTrabajo lista[], int tam, eServicio listaS[], int tamS, eBicicl
 	int isOk=-1;
 	int index;
 
-	if(lista!=NULL && tam>0 && listaS!=NULL && tamS>0 && bicicletas!=NULL && tamB>0)
+	if(lista!=NULL && tam>0 && listaS!=NULL && tamS>0 && bicicletas!=NULL && tamB>0 && id!=NULL)
 	{
 		index=BuscarLibre(lista,tam);
 
@@ -84,7 +87,7 @@ int MostrarTrabajoCompleto(eTrabajo unTrabajo, eServicio servicios[], int tamS, 
 	int isOk=-1;
 	//char descripcionS[25];
 
-	if(servicios != NULL && tamS>0)
+	if(servicios != NULL && tamS>0 && bicicletas!=NULL && tamB>0)
 	{
 		//GetDescripcionServicio(servicios,tamS,unTrabajo.idServicio,descripcionS);
 		auxBicicleta = AuxiliarBicicleta(bicicletas,tamB,unTrabajo.idBicicleta);
@@ -108,7 +111,7 @@ int MostrarListaTrabajosCompleto(eTrabajo lista[], int tam, eServicio servicios[
 	int isOk=-1;
 	int i;
 
-	if(lista!=NULL && tam>0 && servicios!=NULL && tamS>0)
+	if(lista!=NULL && tam>0 && servicios!=NULL && tamS>0 && bicicletas!=NULL && tamB>0)
 	{
 		printf(" ID  \t\t  MARCA \t\t RODADO \tID SERVICIO \t\t DESCRIPCION \t\t   FECHA \n");
 		for(i=0;i<tam;i++)
@@ -166,41 +169,44 @@ int ModificarTrabajo(eTrabajo lista[], int tam, eServicio servicios[], int tamS,
 
 	strcpy(confirmar,"no");
 
-	MostrarListaTrabajosCompleto(lista,tam,servicios,tamS,bicicletas,tamB);
-	utn_getInt("Ingrese el ID del trabajo a modificar: \n","Error, ID invalido\n",1,tam,3,&auxId);
-	index=BuscarTrabajoPorId(lista, tam, auxId);
-	MostrarTrabajoCompleto(lista[index],servicios,tamS,bicicletas,tamB);
-	utn_getString("¿Esta seguro que desea modificar este trabajo? [si/no]\n","Error, ingrese [si/no]\n",4,3,respuesta);
-
-	if(!(stricmp(respuesta,"si")))
+	if(lista!=NULL && tam>0 && servicios!=NULL && tamS>0 && bicicletas!=NULL && tamB>0)
 	{
-		do
+		MostrarListaTrabajosCompleto(lista,tam,servicios,tamS,bicicletas,tamB);
+		utn_getInt("Ingrese el ID del trabajo a modificar: \n","Error, ID invalido\n",1,tam,3,&auxId);
+		index=BuscarTrabajoPorId(lista, tam, auxId);
+		MostrarTrabajoCompleto(lista[index],servicios,tamS,bicicletas,tamB);
+		utn_getString("¿Esta seguro que desea modificar este trabajo? [si/no]\n","Error, ingrese [si/no]\n",4,3,respuesta);
+
+		if(!(stricmp(respuesta,"si")))
 		{
-			switch(MenuModificaciones())
+			do
 			{
-				case 0:
-					utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
-					break;
-				case 1:
-					printf("\t****MODIFICAR MARCA****\t\n");
-					MostrarListaBicicletas(bicicletas,tamB);
-					utn_getInt("Ingrese la nueva marca\n","Error, nombre invalido\n",25,29,3,&auxIdBicicleta);
-					lista[index].idBicicleta=auxIdBicicleta;
-					break;
-				case 2:
-					printf("\t****MODIFICAR SERVICIO****\t\n");
-					MostrarListaServicios(servicios,tamS);
-					utn_getInt("Ingrese el ID del nuevo servicio\n","Error, id invalido\n",20000,20004,3,&auxIdServicio);
-					lista[index].idServicio=auxIdServicio;
-					break;
-			}
-		}while(stricmp(confirmar,"si"));
+				switch(MenuModificaciones())
+				{
+					case 0:
+						utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
+						break;
+					case 1:
+						printf("\t****MODIFICAR MARCA****\t\n");
+						MostrarListaBicicletas(bicicletas,tamB);
+						utn_getInt("Ingrese la nueva marca\n","Error, nombre invalido\n",25,29,3,&auxIdBicicleta);
+						lista[index].idBicicleta=auxIdBicicleta;
+						break;
+					case 2:
+						printf("\t****MODIFICAR SERVICIO****\t\n");
+						MostrarListaServicios(servicios,tamS);
+						utn_getInt("Ingrese el ID del nuevo servicio\n","Error, id invalido\n",20000,20004,3,&auxIdServicio);
+						lista[index].idServicio=auxIdServicio;
+						break;
+				}
+			}while(stricmp(confirmar,"si"));
 
-		isOk=0;
-	}
-	else
-	{
-		printf("No se realizo ningun cambio\n");
+			isOk=0;
+		}
+		else
+		{
+			printf("No se realizo ningun cambio\n");
+		}
 	}
 
 	return isOk;
@@ -213,17 +219,20 @@ int TotalPesosServicio(eTrabajo lista[], int tam, eServicio servicios[], int tam
 	int i;
 	float auxPrecio=0;
 
-	for(i=0; i<tam ; i++)
+	if(lista!=NULL && tam>0 && servicios!=NULL && tamS>0)
 	{
-		if(lista[i].isEmpty==OCUPADO)
+		for(i=0; i<tam ; i++)
 		{
-			auxServicio = AuxiliarServicio(servicios,tamS,lista[i].idServicio);
-			auxPrecio += auxServicio.precio;
-			isOk=0;
+			if(lista[i].isEmpty==OCUPADO)
+			{
+				auxServicio = AuxiliarServicio(servicios,tamS,lista[i].idServicio);
+				auxPrecio += auxServicio.precio;
+				isOk=0;
+			}
 		}
-	}
 
-	printf("El total en pesos por los servicios prestados es: $%.2f ",auxPrecio);
+		printf("El total en pesos por los servicios prestados es: $%.2f ",auxPrecio);
+	}
 
 	return isOk;
 }
@@ -237,36 +246,40 @@ int OrdenarTrabajosPorAnioyMarca(eTrabajo lista[], int tam, eBicicleta bicicleta
 	char auxMarcaI[25];
 	char auxMarcaJ[25];
 
-	for(i = 0; i < tam-1; i++)
+	if(lista!=NULL && tam>0 && bicicletas!=NULL && tamB>0)
 	{
-		GetMarcaBicicleta(bicicletas,tamB,lista[i].idBicicleta,auxMarcaI);
-
-		for(j = i+1; j < tam ; j++)
+		for(i = 0; i < tam-1; i++)
 		{
-			GetMarcaBicicleta(bicicletas,tamB,lista[j].idBicicleta,auxMarcaJ);
+			GetMarcaBicicleta(bicicletas,tamB,lista[i].idBicicleta,auxMarcaI);
 
-			if(lista[i].fecha.anio>lista[j].fecha.anio)
+			for(j = i+1; j < tam ; j++)
 			{
-				auxTrabajo = lista[i];
-				lista[i] = lista[j];
-				lista[j] = auxTrabajo;
-				isOk = 0;
-			}
-			else
-			{
-				if(lista[i].fecha.anio==lista[j].fecha.anio)
+				GetMarcaBicicleta(bicicletas,tamB,lista[j].idBicicleta,auxMarcaJ);
+
+				if(lista[i].fecha.anio>lista[j].fecha.anio)
 				{
-					if((strcmp(auxMarcaI,auxMarcaJ))>0)
+					auxTrabajo = lista[i];
+					lista[i] = lista[j];
+					lista[j] = auxTrabajo;
+					isOk = 0;
+				}
+				else
+				{
+					if(lista[i].fecha.anio==lista[j].fecha.anio)
 					{
-						auxTrabajo = lista[i];
-						lista[i] = lista[j];
-						lista[j] = auxTrabajo;
-						isOk = 0;
+						if((strcmp(auxMarcaI,auxMarcaJ))>0)
+						{
+							auxTrabajo = lista[i];
+							lista[i] = lista[j];
+							lista[j] = auxTrabajo;
+							isOk = 0;
+						}
 					}
 				}
 			}
 		}
 	}
+
 	return isOk;
 }
 
@@ -282,36 +295,39 @@ int ServicioConMasTrabajos(eServicio servicios[], int tamS, eTrabajo lista[], in
 	int i;
 	int j;
 	int c;
-	for(i=0; i<tamS ;i++)
+
+	if(servicios!=NULL && tamS>0 && lista!=NULL && tam>0)
 	{
-		contador[i]=0;
-		index=i;
-		auxServicio[i].id=servicios[i].id;
-		for(j=0;j<tam;j++)
+		for(i=0; i<tamS ;i++)
 		{
-			if((lista[j].isEmpty==OCUPADO) && (lista[j].idServicio==auxServicio[i].id))
+			contador[i]=0;
+			index=i;
+			auxServicio[i].id=servicios[i].id;
+			for(j=0;j<tam;j++)
 			{
-				contador[index]++;
+				if((lista[j].isEmpty==OCUPADO) && (lista[j].idServicio==auxServicio[i].id))
+				{
+					contador[index]++;
+				}
 			}
 		}
-	}
 
-	for(c=0;c<tamS;c++)
-	{
-		if(c==0 || (cantidad<contador[c]))
+		for(c=0;c<tamS;c++)
 		{
-			cantidad=contador[c];
-			id=auxServicio[c].id;
-			isOk=0;
+			if(c==0 || (cantidad<contador[c]))
+			{
+				cantidad=contador[c];
+				id=auxServicio[c].id;
+				isOk=0;
+			}
 		}
+		GetDescripcionServicio(servicios,tamS,id,descripcion);
+		printf("Id del servicio con mayor cantidad de trabajos: %d\n"
+			   "Descripcion: %s\n"
+				"Cantidad de trabajos: %d\n",id
+											,descripcion
+											,cantidad);
 	}
-	GetDescripcionServicio(servicios,tamS,id,descripcion);
-	printf("Id del servicio con mayor cantidad de trabajos: %d\n"
-		   "Descripcion: %s\n"
-			"Cantidad de trabajos: %d\n",id
-		   	   	   	   	   	   	   	    ,descripcion
-									    ,cantidad);
-
 
 	return isOk;
 }
@@ -326,32 +342,34 @@ int ListadoServiciosPorBicicleta(eServicio servicios[], int tamS, eTrabajo lista
 	int index;
 	int flag;
 
-	for(i=0; i<tamS ;i++)
+	if(servicios!=NULL && tamS>0 && lista!=NULL && tam>0 && bicicletas!=NULL && tam>0)
 	{
-		GetDescripcionServicio(servicios,tamS,servicios[i].id,descripcion);
-		printf("Servicio: %s \n",descripcion);
-		flag=0;
-		for(j=0; j<tam ;j++)
+		for(i=0; i<tamS ;i++)
 		{
-			if((lista[j].isEmpty==OCUPADO) && (lista[j].idServicio==servicios[i].id))
+			GetDescripcionServicio(servicios,tamS,servicios[i].id,descripcion);
+			printf("Servicio: %s \n",descripcion);
+			flag=0;
+			for(j=0; j<tam ;j++)
 			{
-				GetMarcaBicicleta(bicicletas,tamB,lista[j].idBicicleta,auxMarca);
-				index = BuscarBicicletaPorId(bicicletas,tamB,lista[j].idBicicleta);
-				printf("ID: %d, Marca: %s, Rodado: %d, Color: %s\n",lista[j].idBicicleta
-																   ,auxMarca
-																   ,bicicletas[index].rodado
-																   ,bicicletas[index].color);
-				flag=1;
-				isOk=0;
+				if((lista[j].isEmpty==OCUPADO) && (lista[j].idServicio==servicios[i].id))
+				{
+					GetMarcaBicicleta(bicicletas,tamB,lista[j].idBicicleta,auxMarca);
+					index = BuscarBicicletaPorId(bicicletas,tamB,lista[j].idBicicleta);
+					printf("ID: %d, Marca: %s, Rodado: %d, Color: %s\n",lista[j].idBicicleta
+																	   ,auxMarca
+																	   ,bicicletas[index].rodado
+																	   ,bicicletas[index].color);
+					flag=1;
+					isOk=0;
+				}
 			}
+			if(flag==0)
+			{
+				printf("\nNo hay bicicletas para este servicio\n");
+			}
+			printf("\n");
 		}
-		if(flag==0)
-		{
-			printf("\nNo hay bicicletas para este servicio\n");
-		}
-		printf("\n");
 	}
-
 
 	return isOk;
 }
@@ -363,19 +381,22 @@ int CantidadBicisRojas(eBicicleta bicicletas[], int tamB, eTrabajo lista[], int 
 	int i;
 	int index;
 
-	for(i=0;i<tam;i++)
+	if(bicicletas!=NULL && tamB>0 && lista!=NULL && tam>0)
 	{
-		if(lista[i].isEmpty==OCUPADO)
+		for(i=0;i<tam;i++)
 		{
-			index = BuscarBicicletaPorId(bicicletas,tamB,lista[i].idBicicleta);
-			if(!(stricmp(bicicletas[index].color,"rojo")))
+			if(lista[i].isEmpty==OCUPADO)
 			{
-				contador++;
-				isOk=0;
+				index = BuscarBicicletaPorId(bicicletas,tamB,lista[i].idBicicleta);
+				if(!(stricmp(bicicletas[index].color,"rojo")))
+				{
+					contador++;
+					isOk=0;
+				}
 			}
 		}
+		printf("La cantidad de bicicletas rojas es: %d",contador);
 	}
-	printf("La cantidad de bicicletas rojas es: %d",contador);
 
 	return isOk;
 }

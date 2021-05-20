@@ -11,24 +11,6 @@
 #include "Trabajo.h"
 #include "Utn.h"
 
-void HardcodeoTrabajo(eTrabajo listaT[])
-{
-	int id[3]={1,2,3};
-	int idBicicleta[3]={25,26,27};
-	int idServicio[3]={20000,20001,20002};
-	eFecha fecha[3]={{1,2,2020},{10,10,1998},{12,5,2015}};
-	int i;
-
-	for(i=0;i<3;i++)
-	{
-		listaT[i].id=id[i];
-		listaT[i].idBicicleta=idBicicleta[i];
-		listaT[i].idServicio=idServicio[i];
-		listaT[i].fecha=fecha[i];
-		listaT[i].isEmpty=OCUPADO;
-	}
-}
-
 void ObtenerId (int* idTrabajo)
 {
 	*idTrabajo+=1;
