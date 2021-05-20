@@ -23,13 +23,16 @@ int main(void)
 	int flag;
 	int i;
 	int idServicio=20000;
+	int idBicicleta=25;
 	eTrabajo unTrabajo[T];
 	eServicio unServicio[S];
-	int idAutoIncremental=0;
+	eBicicleta unaBicicleta[B];
+	int idTrabajo=0;
 
 	Inicializar(unTrabajo,T);
 	HardcodeoServicio(unServicio,&idServicio);
-	HardcodeoTrabajo(unTrabajo);
+	HardcodeoBicicleta(unaBicicleta,&idBicicleta);
+	//HardcodeoTrabajo(unTrabajo);
 	strcpy(confirmar,"no");
 
 	do
@@ -45,7 +48,7 @@ int main(void)
 				utn_getInt("\n¿Cuantos trabajos desea dar de alta?\n","\nError, cantidad invalida\n",1,1000,3,&cantidad);
 				do
 				{
-					if(!(AltaTrabajo(unTrabajo,T,unServicio,S,&idAutoIncremental)))
+					if(!(AltaTrabajo(unTrabajo,T,unServicio,S,unaBicicleta,B,&idTrabajo)))
 					{
 						flag=REALIZADO;
 					}
@@ -55,7 +58,7 @@ int main(void)
 					}
 					if(flag==REALIZADO)
 					{
-						printf("\nSe han dado de alta con exito\n");
+						printf("\nSe ha dado de alta con exito\n");
 					}
 					else
 					{
@@ -68,11 +71,11 @@ int main(void)
 				printf("\t\t>>MODIFICAR<<\t\t\n");
 				if(flag==REALIZADO)
 				{
-					 ModificarTrabajo(unTrabajo,T,unServicio,S);
+					 ModificarTrabajo(unTrabajo,T,unServicio,S,unaBicicleta,B);
 				}
 				else
 				{
-					printf("Error, no se han dado de alta ningun trabajo\n");
+					printf("Error, no se ha dado de alta ningun trabajo\n");
 				}
 				break;
 			case 3:
@@ -83,7 +86,7 @@ int main(void)
 					utn_getInt("¿Cuantos trabajos desea dar de baja?\n","Error, cantidad invalida\n",1,1000,3,&cantidad);
 					do
 					{
-						if(BajaTrabajo(unTrabajo,T,unServicio,S))
+						if(BajaTrabajo(unTrabajo,T,unServicio,S,unaBicicleta,B))
 						{
 							printf("Ningun cambio realizado\n");
 						}
@@ -99,8 +102,8 @@ int main(void)
 				printf("\t\t\t\t>>LISTA DE TRABAJOS<<\t\t\n");
 				if(flag==REALIZADO)
 				{
-					OrdenarTrabajosPorAnio(unTrabajo,T);
-					if(MostrarListaTrabajosConServicio(unTrabajo,T,unServicio,S)!=0)
+					OrdenarTrabajosPorAnioyMarca(unTrabajo,T,unaBicicleta,B);
+					if(MostrarListaTrabajosCompleto(unTrabajo,T,unServicio,S,unaBicicleta,B)!=0)
 					{
 						printf("No hay trabajos para mostrar\n");
 					}
@@ -113,6 +116,12 @@ int main(void)
 			case 5:
 				printf("\t  >>LISTA DE SERVICIOS<<\t\t\n");
 				MostrarListaServicios(unServicio,S);
+				printf("\t  >>SERVICIO CON MAS TRABAJOS<<\t\t\n");
+				ServicioConMasTrabajos(unServicio,S,unTrabajo,T);
+				printf("\t  >>SERVICIO CON SU BICICLETA<<\t\t\n");
+				ListadoServiciosPorBicicleta(unServicio,S,unTrabajo,T,unaBicicleta,B);
+				printf("\t  >>CANTIDAD DE BICICLETAS ROJAS QUE HICIERON SERVICIO<<\t\t\n");
+				CantidadBicisRojas(unaBicicleta,B,unTrabajo,T);
 				break;
 			case 6:
 				printf("\t\t  >>TOTAL<<\t\t\n");

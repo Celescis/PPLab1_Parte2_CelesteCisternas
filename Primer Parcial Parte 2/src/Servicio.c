@@ -72,7 +72,7 @@ int GetDescripcionServicio(eServicio lista[], int tam, int buscarCodigo, char de
 	return isOk;
 }
 
-eServicio BuscarServicioPorId(eServicio servicios[], int tam, int id)
+eServicio AuxiliarServicio(eServicio servicios[], int tam, int id)
 {
 	eServicio unServicio;
 	int i;

@@ -10,7 +10,6 @@
 #define T 1000
 #define VACIO 0
 #define OCUPADO 1
-#define BAJA -1
 
 typedef struct
 {
@@ -22,8 +21,7 @@ typedef struct
 typedef struct
 {
 	int id;
-	char marcaBicicleta[25];
-	int rodadoBicicleta;
+    int idBicicleta;
 	int idServicio;
 	eFecha fecha;
 	int isEmpty;
@@ -34,6 +32,6 @@ void ObtenerId (int* idAutoIncremental);
 void Inicializar(eTrabajo lista[], int tam);
 int BuscarLibre(eTrabajo lista[], int tam);
 int BuscarTrabajoPorId(eTrabajo lista[], int tam, int id);
-int OrdenarTrabajosPorAnio(eTrabajo lista[], int tam);
+
 
 #endif /* TRABAJO_H_ */

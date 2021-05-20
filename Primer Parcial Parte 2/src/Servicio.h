@@ -20,6 +20,6 @@ void HardcodeoServicio(eServicio lista[], int* idServicio);
 void MostrarServicio(eServicio servicio);
 int MostrarListaServicios(eServicio servicios[], int tam);
 int GetDescripcionServicio(eServicio lista[], int tam, int buscarCodigo, char descripcion[]);
-eServicio BuscarServicioPorId(eServicio servicios[], int tam, int id);
+eServicio AuxiliarServicio(eServicio servicios[], int tam, int id);
 
 #endif /* SERVICIO_H_ */
